@@ -21,13 +21,17 @@ class ShopwareServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/shopware.php', 'shopware');
 
         $this->app->singleton(Shopware::class, function ($app) {
-            return new Shopware(
+            $connector = new Shopware(
                 baseUrl: config('shopware.base_url'),
                 clientId: config('shopware.client_id'),
                 clientSecret: config('shopware.client_secret'),
                 tokenUrl: config('shopware.token_url'),
                 scopes: config('shopware.scopes'),
             );
+
+            $connector->authenticate($connector->getAccessToken());
+
+            return $connector;
         });
 
         $this->app->alias(Shopware::class, 'shopware');
