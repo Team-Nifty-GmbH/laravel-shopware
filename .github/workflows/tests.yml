@@ -16,6 +16,12 @@ jobs:
 
     name: PHP ${{ matrix.php }}
 
+    # The self-hosted runner executes as root with no HOME, and composer refuses
+    # to start without one. It has nothing to do with the matrix; the workflow
+    # simply has not run since the runner changed under it.
+    env:
+      COMPOSER_HOME: /tmp/composer-home
+
     steps:
       - uses: actions/checkout@v6
 
