@@ -40,8 +40,14 @@ return [
     | OAuth Scopes
     |--------------------------------------------------------------------------
     |
-    | The OAuth scopes to request when authenticating.
+    | The OAuth scopes to request when authenticating, as a plain list.
+    |
+    | Saloon joins the *values* of this array into the scope string it sends, so
+    | a name => label map asks the shop for a scope literally called "Full write
+    | access". Shopware answers 400 with "The requested scope is invalid,
+    | unknown, or malformed / Check the `Full` scope" on the token request, which
+    | means no call to the shop ever succeeds.
     |
     */
-    'scopes' => ['write' => 'Full write access'],
+    'scopes' => ['write'],
 ];

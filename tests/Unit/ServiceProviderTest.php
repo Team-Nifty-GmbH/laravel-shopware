@@ -22,8 +22,11 @@ test('config is merged', function (): void {
         ->and(config('shopware.client_secret'))->toBe('test-client-secret');
 });
 
-test('config has default scopes', function (): void {
-    expect(config('shopware.scopes'))->toBe(['write' => 'Full write access']);
+test('config has default scopes as a list', function (): void {
+    // A list, not a name => label map. Saloon joins the values into the scope
+    // string it sends, so a map asks the shop for a scope called "Full write
+    // access" and Shopware refuses the token request outright.
+    expect(config('shopware.scopes'))->toBe(['write']);
 });
 
 test('config token_url defaults to null', function (): void {
