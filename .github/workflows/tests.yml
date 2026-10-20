@@ -6,21 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   tests:
-    runs-on: [self-hosted, Linux]
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         php: [8.3, 8.4, 8.5]
 
     name: PHP ${{ matrix.php }}
-
-    # The self-hosted runner executes as root with no HOME, and composer refuses
-    # to start without one. It has nothing to do with the matrix; the workflow
-    # simply has not run since the runner changed under it.
-    env:
-      COMPOSER_HOME: /tmp/composer-home
 
     steps:
       - uses: actions/checkout@v6
